@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sura Bakers — Fresh brownies, cakes &amp; laddus, baked to order</title>
+<meta name="description" content="Sura Bakers is a home cloud kitchen making fresh brownies, specialty cakes, laddus, muffins and cookies. Order online, we bake and deliver.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="top">
+  <div class="wrap header-row">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44" width="40" height="40">
+          <circle cx="22" cy="22" r="20.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M13 26c1.5-8 4-12 9-12s7.5 4 9 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M12 27h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-name">Sura Bakers</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#menu">Menu</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+	<div class="mobile-nav" id="mobileNav" hidden>
+    <a href="#menu">Menu</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<!-- a bit of counter-signage energy, right where a shop would put it -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Baked fresh every morning</span><span class="dot">•</span>
+    <span>Next-day delivery in Lucknow</span><span class="dot">•</span>
+    <span>No minimum order</span><span class="dot">•</span>
+    <span>Baked fresh every morning</span><span class="dot">•</span>
+    <span>Next-day delivery in Lucknow</span><span class="dot">•</span>
+    <span>No minimum order</span><span class="dot">•</span>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-label="Introduction">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker reveal" style="--d:0">A home kitchen in Lucknow, baking daily</p>
+        <h1 class="hero-title">
+          <span class="reveal" style="--d:1">Every box,</span>
+          <span class="reveal" style="--d:2">baked the</span>
+          <span class="reveal reveal-em" style="--d:3">morning</span>
+          <span class="reveal" style="--d:4">it ships.</span>
+        </h1>
+        <p class="hero-sub reveal" style="--d:5">Brownies, specialty cakes, laddus, muffins and cookies — chosen from today's kitchen and sent straight to your door.</p>
+        <div class="hero-actions reveal" style="--d:6">
+          <a href="#menu" class="btn btn-primary">See today's menu</a>
+          <a href="#how-it-works" class="btn btn-ghost-invert">How ordering works</a>
+        </div>
+      </div>
+
+      <div class="hero-collage" aria-hidden="true">
+        <figure class="collage-photo collage-1 reveal" style="--d:2">
+          <img src="media/cak-2.jpg" alt="" loading="eager" onerror="this.closest('.collage-photo').classList.add('img-missing')">
+        </figure>
+        <figure class="collage-photo collage-2 reveal" style="--d:3">
+          <img src="media/bwn-2.jpg" alt="" loading="eager" onerror="this.closest('.collage-photo').classList.add('img-missing')">
+        </figure>
+        <figure class="collage-photo collage-3 reveal" style="--d:4">
+          <img src="media/lad-2.jpg" alt="" loading="eager" onerror="this.closest('.collage-photo').classList.add('img-missing')">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MENU ============ -->
+  <section class="menu-section" id="menu" aria-labelledby="menu-heading">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="menu-heading">Today's box</h2>
+        <p>What's marked sold out has run out for the day — everything else ships within the window you choose at checkout.</p>
+      </div>
+
+      <div class="filter-row" id="filterRow" role="tablist" aria-label="Filter menu by category">
+        <button class="filter-chip is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="filter-chip" data-filter="brownies" role="tab" aria-selected="false">Brownies</button>
+        <button class="filter-chip" data-filter="cakes" role="tab" aria-selected="false">Cakes</button>
+        <button class="filter-chip" data-filter="laddus" role="tab" aria-selected="false">Laddus</button>
+        <button class="filter-chip" data-filter="muffins" role="tab" aria-selected="false">Muffins</button>
+        <button class="filter-chip" data-filter="cookies" role="tab" aria-selected="false">Cookies</button>
+      </div>
+
+      <div class="menu-grid" id="menuGrid" aria-live="polite">
+        <!-- injected by script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="how-section" id="how-it-works" aria-labelledby="how-heading">
+    <div class="wrap how-grid">
+      <div class="how-step reveal-on-scroll">
+        <span class="how-num">01</span>
+        <h3>Choose your treats</h3>
+        <p>Add anything in today's box to your order — mix brownies with laddus, no minimum.</p>
+      </div>
+      <div class="how-step reveal-on-scroll">
+        <span class="how-num">02</span>
+        <h3>Send us your order</h3>
+        <p>Fill in your address and a delivery window. It goes straight to the kitchen — no account needed.</p>
+      </div>
+      <div class="how-step reveal-on-scroll">
+        <span class="how-num">03</span>
+        <h3>We bake, then deliver</h3>
+        <p>Nothing sits waiting. Your order is baked for the slot you picked and sent out fresh.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="reviews-section" id="reviews" aria-labelledby="reviews-heading">
+    <div class="wrap">
+      <div class="section-head section-head-light">
+        <h2 id="reviews-heading">From our customers</h2>
+        <p>Notes people sent us after their order arrived.</p>
+      </div>
+      <div class="reviews-grid" id="reviewsGrid">
+        <!-- injected by script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT / CTA ============ -->
+  <section class="cta-section" id="contact" aria-labelledby="cta-heading">
+    <div class="wrap cta-inner">
+      <h2 id="cta-heading">Baking again tomorrow morning.</h2>
+      <p>Get your order in today and it'll be in tomorrow's box.</p>
+      <a href="#menu" class="btn btn-primary">Start an order</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <span class="brand-name">Sura Bakehouse</span>
+      <p>A home cloud kitchen. No storefront — every order is baked for delivery.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Get in touch</h4>
+      <ul>
+        <li><a href="https://instagram.com/surabakers" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://wa.me/910000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="tel:+910000000000">+91 00000 00000</a></li>
+        <li><a href="mailto:hello@surabakers.in">hello@surabakers.in</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Kitchen hours</h4>
+      <ul class="plain">
+        <li>Tue–Sun, 9am – 7pm</li>
+        <li>Closed Mondays</li>
+        <li>Lucknow, Uttar Pradesh</li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <p>&copy; <span id="year"></span> Sura Bakehouse. All orders subject to daily availability.</p>
+    <p class="footer-credit">Site by <a href="https://de-sparsh.onrender.com/" target="_blank" rel="noopener">Sparsh</a></p>
+  </div>
+</footer>
+
+<!-- ============ FLOATING ORDER BUTTON ============ -->
+<button class="tray-fab" id="trayBtn" aria-haspopup="dialog" aria-controls="trayPanel">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+    <path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.8H7.5a2 2 0 0 1-2-1.8L4 8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  </svg>
+  <span class="tray-count" id="trayCount" hidden>0</span>
+</button>
+
+<!-- ============ ORDER TRAY PANEL ============ -->
+<div class="tray-overlay" id="trayOverlay" hidden></div>
+<aside class="tray-panel" id="trayPanel" role="dialog" aria-modal="true" aria-labelledby="trayTitle" hidden>
+  <div class="tray-panel-head">
+    <h2 id="trayTitle">Your order</h2>
+    <button class="icon-btn" id="trayClose" aria-label="Close order panel">&times;</button>
+  </div>
+
+  <div class="tray-body" id="trayBody">
+    <!-- item list injected here -->
+  </div>
+
+  <form class="tray-form" id="orderForm">
+    <div class="field-row">
+      <label for="custName">Your name</label>
+      <input id="custName" name="name" type="text" required autocomplete="name">
+    </div>
+    <div class="field-row">
+      <label for="custPhone">Phone number</label>
+      <input id="custPhone" name="phone" type="tel" required autocomplete="tel" inputmode="tel">
+    </div>
+    <div class="field-row">
+      <label for="custAddress">Delivery address</label>
+      <textarea id="custAddress" name="address" rows="2" required autocomplete="street-address"></textarea>
+    </div>
+    <div class="field-row field-row-split">
+      <div>
+        <label for="custDate">Delivery date</label>
+        <input id="custDate" name="date" type="date" required>
+      </div>
+      <div>
+        <label for="custSlot">Preferred window</label>
+        <select id="custSlot" name="slot" required>
+          <option value="">Choose one</option>
+          <option>Morning (9am–12pm)</option>
+          <option>Afternoon (12pm–4pm)</option>
+          <option>Evening (4pm–7pm)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <label for="custNotes">Notes for the kitchen (optional)</label>
+      <textarea id="custNotes" name="notes" rows="2" placeholder="Allergies, message on the cake, gate code..."></textarea>
+    </div>
+
+    <div class="tray-total" id="trayTotal">Total: ₹0</div>
+
+    <button type="submit" class="btn btn-primary btn-block" id="submitOrderBtn">Send order to the kitchen</button>
+    <p class="tray-note">We'll bake and deliver — you'll hear from us on the phone number above to confirm.</p>
+  </form>
+
+  <div class="tray-success" id="traySuccess" hidden>
+    <svg viewBox="0 0 60 60" width="52" height="52" aria-hidden="true">
+      <circle cx="30" cy="30" r="27" fill="none" stroke="#55704A" stroke-width="2.5"/>
+      <path d="M18 31 L27 40 L43 21" fill="none" stroke="#55704A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>Your order is on its way to the kitchen</h3>
+    <p>We'll call <span id="successPhone">you</span> to confirm the details. Thank you!</p>
+    <button class="btn btn-ghost" id="trayDone">Done</button>
+  </div>
+</aside>
+
+<script src="script.js" defer></script>
+</body>
+</html>
