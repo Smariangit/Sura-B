@@ -40,7 +40,6 @@ const FALLBACK_MENU = [
   { id: 'coo-1', name: 'Jeera Butter Cookies', category: 'cookies', price: 30, desc: 'Toasted cumin, ghee, a shop classic. Priced per piece.', available: true, image: 'media/coo-1.jpg' },
   { id: 'coo-2', name: 'Choc Chip Cookies', category: 'cookies', price: 35, desc: 'Crisp edges, soft centre. Priced per piece.', available: true, image: 'media/coo-2.jpg' },
   { id: 'coo-3', name: 'Nan Khatai', category: 'cookies', price: 25, desc: 'Traditional semolina shortbread. Priced per piece.', available: true, image: 'media/coo-3.jpg' },
-  { id: 'coo-3', name: 'Pastry', category: 'cakes', price: 25, desc: 'Traditional pastry tester. Priced per piece.', available: true, image: 'media/coo-4.jpg' },
 ];
 
 const FALLBACK_REVIEWS = [
@@ -325,24 +324,37 @@ navToggle.addEventListener('click', () => {
 mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mobileNav.hidden = true; navToggle.setAttribute('aria-expanded', 'false'); }));
 
 /* ---------- scroll reveal for "how it works" ---------- */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('is-visible'), i * 90);
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('is-visible'), i * 90);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+} else {
+  // no IntersectionObserver support — show the steps immediately rather
+  // than leaving them permanently invisible
+  document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('is-visible'));
+}
 
 /* ---------- misc ---------- */
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* ---------- init ---------- */
+/* ---------- init (menu + reviews) ----------
+   Runs independently of the enhancements above, and is wrapped so a
+   failure here surfaces in the console instead of silently leaving
+   the page blank. */
 (async function init() {
-  const [menu, reviews] = await Promise.all([loadMenu(), loadReviews()]);
-  MENU = menu;
-  renderMenu('all');
-  renderReviews(reviews);
-  updateTrayCount();
+  try {
+    const [menu, reviews] = await Promise.all([loadMenu(), loadReviews()]);
+    MENU = menu;
+    renderMenu('all');
+    renderReviews(reviews);
+    updateTrayCount();
+  } catch (err) {
+    console.error('Failed to initialize menu/reviews:', err);
+  }
 })();
