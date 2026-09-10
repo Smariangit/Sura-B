@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sura Bakers — Fresh brownies, cakes &amp; laddus, baked to order</title>
-<meta name="description" content="Sura Bakers is a home cloud kitchen making fresh brownies, specialty cakes, laddus, muffins and cookies. Order online, we bake and deliver.">
+<title>Sura Bakehouse — Fresh brownies, cakes &amp; laddus, baked to order</title>
+<meta name="description" content="Sura Bakehouse is a home cloud kitchen making fresh brownies, specialty cakes, laddus, muffins and cookies. Order online, we bake and deliver.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="icon" type="image/jpeg" href="media/logo.jpg">
 </head>
 <body>
 
@@ -18,17 +19,12 @@
 <header class="site-header" id="top">
   <div class="wrap header-row">
     <a href="#top" class="brand">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 44 44" width="40" height="40">
-          <circle cx="22" cy="22" r="20.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
-          <path d="M13 26c1.5-8 4-12 9-12s7.5 4 9 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M12 27h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-      </span>
-      <span class="brand-name">Sura Bakers</span>
+      <img class="brand-mark" src="media/logo.jpg" alt="Sura Bakehouse logo" width="40" height="40">
+      <span class="brand-name">Sura Bakehouse</span>
     </a>
 
     <nav class="main-nav" aria-label="Primary">
+      <a href="#about">About</a>
       <a href="#menu">Menu</a>
       <a href="#how-it-works">How it works</a>
       <a href="#reviews">Reviews</a>
@@ -40,7 +36,8 @@
     </button>
   </div>
 
-	<div class="mobile-nav" id="mobileNav" hidden>
+  <div class="mobile-nav" id="mobileNav" hidden>
+    <a href="#about">About</a>
     <a href="#menu">Menu</a>
     <a href="#how-it-works">How it works</a>
     <a href="#reviews">Reviews</a>
@@ -52,10 +49,10 @@
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track">
     <span>Baked fresh every morning</span><span class="dot">•</span>
-    <span>Next-day delivery in Lucknow</span><span class="dot">•</span>
+    <span>Same-day delivery in Lucknow</span><span class="dot">•</span>
     <span>No minimum order</span><span class="dot">•</span>
     <span>Baked fresh every morning</span><span class="dot">•</span>
-    <span>Next-day delivery in Lucknow</span><span class="dot">•</span>
+    <span>Same-day delivery in Lucknow</span><span class="dot">•</span>
     <span>No minimum order</span><span class="dot">•</span>
   </div>
 </div>
@@ -90,6 +87,55 @@
         <figure class="collage-photo collage-3 reveal" style="--d:4">
           <img src="media/lad-2.jpg" alt="" loading="eager" onerror="this.closest('.collage-photo').classList.add('img-missing')">
         </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT THE CHEF ============ -->
+  <section class="about-section" id="about" aria-labelledby="about-heading">
+    <div class="wrap about-grid">
+      <div class="about-photo-col">
+        <div class="chef-portrait">
+          <img src="media/chef.jpg" alt="Photo of the chef behind Sura Bakehouse" loading="lazy" onerror="this.closest('.chef-portrait').classList.add('img-missing')">
+          <span class="chef-portrait-fallback" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 26c0-9 5.5-15 12-15s12 6 12 15c3 1 5 4 5 7.5 0 4.5-4 8-9 8H24c-5 0-9-3.5-9-8 0-3.5 2-6.5 5-7.5Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M22 41.5V50a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8.5" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </span>
+        </div>
+        <span class="chef-badge">Founder &amp; Head Baker</span>
+      </div>
+
+      <div class="about-copy">
+        <p class="hero-kicker" style="color: var(--pink-deep);">Meet the baker</p>
+        <h2 id="about-heading">The hands behind every box</h2>
+        <p class="about-lead">Every order that leaves this kitchen is mixed, shaped and baked by one person — not a production line. That's a promise about care as much as it is about taste: nothing goes out that she wouldn't serve her own family.</p>
+
+        <ul class="about-credentials">
+          <li>Trained in professional baking &amp; patisserie <span class="credential-note">[add culinary school / certification name]</span></li>
+          <li><span class="credential-note">[X]</span>+ years of hands-on baking experience</li>
+          <li>Specializes in fusion Indian–Western baking — from laddus to layered cakes</li>
+        </ul>
+
+        <blockquote class="about-quote">
+          "I grew up watching my mother make laddus for every festival, and I wanted that same warmth in every box we send out — whether it's a brownie or a birthday cake." <span class="credential-note">[replace with her own words]</span>
+        </blockquote>
+
+        <div class="trust-row">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 3l7 3v6c0 5-3 8.5-7 9.5C8 20.5 5 17 5 12V6l7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span>Hygiene-first kitchen</span>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M8 12.5l2.5 2.5L16 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>No preservatives, ever</span>
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M4 8h16l-1.5 11a2 2 0 0 1-2 1.8H7.5a2 2 0 0 1-2-1.8L4 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Baked to order, every time</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -166,6 +212,7 @@
 <footer class="site-footer">
   <div class="wrap footer-grid">
     <div class="footer-brand">
+      <img class="footer-logo" src="media/logo.jpg" alt="Sura Bakehouse logo" width="52" height="52">
       <span class="brand-name">Sura Bakehouse</span>
       <p>A home cloud kitchen. No storefront — every order is baked for delivery.</p>
     </div>
@@ -257,8 +304,8 @@
 
   <div class="tray-success" id="traySuccess" hidden>
     <svg viewBox="0 0 60 60" width="52" height="52" aria-hidden="true">
-      <circle cx="30" cy="30" r="27" fill="none" stroke="#55704A" stroke-width="2.5"/>
-      <path d="M18 31 L27 40 L43 21" fill="none" stroke="#55704A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="30" cy="30" r="27" fill="none" stroke="#C0276A" stroke-width="2.5"/>
+      <path d="M18 31 L27 40 L43 21" fill="none" stroke="#C0276A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <h3>Your order is on its way to the kitchen</h3>
     <p>We'll call <span id="successPhone">you</span> to confirm the details. Thank you!</p>
