@@ -5,9 +5,9 @@
    sample data below, so it always works for preview/dev.
    ========================================================= */
 const CONFIG = {
-  MENU_API_URL: '',    // e.g. 'https://script.google.com/macros/s/AKfycbwGtAwV7kyOGuckB2FEMFsCe2bIcgmAGlhx5aR2esA5tGtksfHSOyD0uLT02eViJfpDAQ/exec?type=menu' 
-  REVIEWS_API_URL: '', // e.g. 'https://script.google.com/macros/s/AKfycbwGtAwV7kyOGuckB2FEMFsCe2bIcgmAGlhx5aR2esA5tGtksfHSOyD0uLT02eViJfpDAQ/exec?type=reviews'
-  ORDER_API_URL: '',   // e.g. 'https://script.google.com/macros/s/AKfycbwGtAwV7kyOGuckB2FEMFsCe2bIcgmAGlhx5aR2esA5tGtksfHSOyD0uLT02eViJfpDAQ/exec'
+  MENU_API_URL: 'https://script.google.com/macros/s/AKfycbyjvyiOLNVZwy6EyIuH5HIhrVWwrw_xNVlXpZYxVln1HmJRuABJHs-sK1Vz7Ys6z7SrmQ/exec?type=menu',
+  REVIEWS_API_URL: 'https://script.google.com/macros/s/AKfycbyjvyiOLNVZwy6EyIuH5HIhrVWwrw_xNVlXpZYxVln1HmJRuABJHs-sK1Vz7Ys6z7SrmQ/exec?type=reviews',
+  ORDER_API_URL: 'https://script.google.com/macros/s/AKfycbyjvyiOLNVZwy6EyIuH5HIhrVWwrw_xNVlXpZYxVln1HmJRuABJHs-sK1Vz7Ys6z7SrmQ/exec',
 };
 
 /* Fallback sample data — mirrors exactly what the Google Sheet
