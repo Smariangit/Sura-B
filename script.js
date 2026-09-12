@@ -5,9 +5,10 @@
    sample data below, so it always works for preview/dev.
    ========================================================= */
 const CONFIG = {
-  MENU_API_URL: 'https://script.google.com/macros/s/AKfycbx56zsAJ-polOPr79IiI5uwp5XndHNwL3-YKDmTky_BRzhxYBP_TGV5yAYlKl-Aty5y0A/exec?type=menu',
-  REVIEWS_API_URL: 'https://script.google.com/macros/s/AKfycbx56zsAJ-polOPr79IiI5uwp5XndHNwL3-YKDmTky_BRzhxYBP_TGV5yAYlKl-Aty5y0A/exec?type=reviews',
-  ORDER_API_URL: 'https://script.google.com/macros/s/AKfycbx56zsAJ-polOPr79IiI5uwp5XndHNwL3-YKDmTky_BRzhxYBP_TGV5yAYlKl-Aty5y0A/exec',
+  MENU_API_URL: 'https://script.google.com/macros/s/AKfycby5isiY2E49AjKdnp8vUYln-QTd69hBBJjxBwMk4DhZ7KcD4N-pOFFbsOXdDkhGlA4hBA/exec?type=menu',
+  REVIEWS_API_URL: 'https://script.google.com/macros/s/AKfycby5isiY2E49AjKdnp8vUYln-QTd69hBBJjxBwMk4DhZ7KcD4N-pOFFbsOXdDkhGlA4hBA/exec?type=reviews',
+  ORDER_API_URL: 'https://script.google.com/macros/s/AKfycby5isiY2E49AjKdnp8vUYln-QTd69hBBJjxBwMk4DhZ7KcD4N-pOFFbsOXdDkhGlA4hBA/exec',
+  BLOCKED_DATES_API_URL: 'https://script.google.com/macros/s/AKfycby5isiY2E49AjKdnp8vUYln-QTd69hBBJjxBwMk4DhZ7KcD4N-pOFFbsOXdDkhGlA4hBA/exec?type=blocked',
 };
 
 /* Fallback sample data — mirrors exactly what the Google Sheet
@@ -48,6 +49,10 @@ const FALLBACK_REVIEWS = [
   { name: 'Priya M.', dish: 'Besan Laddu', text: 'Tastes exactly like my grandmother used to make. Ordering these every festival from now on.' },
 ];
 
+// No blocks by default — until the Sheet's "Blocked Dates" tab has rows,
+// or if that request fails, every day is open for ordering.
+const FALLBACK_BLOCKED_DATES = [];
+
 const ICONS = {
   brownies: `<svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="18" width="36" height="24" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 26h36M20 18v24M34 18v24" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M15 13c1-3 3-3 4-1s3 2 4 0 3-3 4-1 3 2 4 0 3-3 4-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   cakes: `<svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 30l18-14 18 14v10a2 2 0 0 1-2 2H11a2 2 0 0 1-2-2V30Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 30h36" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M27 16V9m0 0c-2 0-3-1.5-3-3s1.5-3 3-3 3 1.5 3 3-1 3-3 3Z" stroke="currentColor" stroke-width="1.6"/></svg>`,
@@ -83,6 +88,21 @@ async function loadReviews() {
   } catch (err) {
     console.warn('Reviews API unavailable, using sample reviews.', err);
     return FALLBACK_REVIEWS;
+  }
+}
+
+async function loadBlockedDates() {
+  if (!CONFIG.BLOCKED_DATES_API_URL) return FALLBACK_BLOCKED_DATES;
+  try {
+    const res = await fetch(CONFIG.BLOCKED_DATES_API_URL);
+    const data = await res.json();
+    // Unlike menu/reviews, an empty array here is a legitimate real
+    // state (no blocked dates right now) — only fall back on an
+    // actual failure, not on a valid empty result.
+    return Array.isArray(data) ? data : FALLBACK_BLOCKED_DATES;
+  } catch (err) {
+    console.warn('Blocked dates API unavailable, assuming no blocks.', err);
+    return FALLBACK_BLOCKED_DATES;
   }
 }
 
@@ -256,12 +276,187 @@ trayClose.addEventListener('click', closeTray);
 trayOverlay.addEventListener('click', closeTray);
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && trayPanel.classList.contains('is-open')) closeTray(); });
 
+/* ---------- delivery-date calendar ----------
+   Blocked ranges come from the "Blocked Dates" sheet tab via
+   loadBlockedDates(); BLOCKED_RANGES starts empty (nothing blocked)
+   and is filled in once that request resolves — the calendar is
+   fully usable even before that happens. */
+let BLOCKED_RANGES = [];
+let calendarViewDate = new Date();
+let selectedDeliveryDate = null;
+
+function parseISODate(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+function formatISODate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+function findBlockedRange(date) {
+  const t = startOfDay(date).getTime();
+  return BLOCKED_RANGES.find(r => {
+    const start = startOfDay(parseISODate(r.start)).getTime();
+    const end = startOfDay(parseISODate(r.end)).getTime();
+    return t >= start && t <= end;
+  }) || null;
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('datePickerGrid');
+  const monthLabel = document.getElementById('datePickerMonthLabel');
+  if (!grid || !monthLabel) return;
+
+  const year = calendarViewDate.getFullYear();
+  const month = calendarViewDate.getMonth();
+  monthLabel.textContent = calendarViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  const startWeekday = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = startOfDay(new Date());
+
+  grid.innerHTML = '';
+  for (let i = 0; i < startWeekday; i++) {
+    const filler = document.createElement('span');
+    filler.className = 'date-cell is-empty';
+    grid.appendChild(filler);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const cellDate = new Date(year, month, day);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'date-cell';
+    btn.textContent = day;
+
+    const isPast = cellDate.getTime() < today.getTime();
+    const blockedRange = findBlockedRange(cellDate);
+
+    if (isPast || blockedRange) {
+      btn.disabled = true;
+      if (isPast) btn.classList.add('is-past');
+      if (blockedRange) {
+        btn.classList.add('is-blocked');
+        btn.title = blockedRange.reason ? `Fully booked — ${blockedRange.reason}` : 'Fully booked';
+      }
+    } else {
+      btn.addEventListener('click', () => selectDeliveryDate(cellDate));
+    }
+    if (cellDate.getTime() === today.getTime()) btn.classList.add('is-today');
+    if (selectedDeliveryDate && cellDate.getTime() === startOfDay(selectedDeliveryDate).getTime()) {
+      btn.classList.add('is-selected');
+    }
+
+    grid.appendChild(btn);
+  }
+}
+
+function selectDeliveryDate(date) {
+  selectedDeliveryDate = date;
+  document.getElementById('custDate').value = formatISODate(date);
+  document.getElementById('dateTriggerLabel').textContent =
+    date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  document.getElementById('dateTrigger').classList.add('has-value');
+  clearDateError();
+  closeDatePicker();
+  renderCalendar();
+}
+
+function showDateError(message) {
+  const el = document.getElementById('dateFieldError');
+  if (!el) return;
+  el.textContent = message;
+  el.hidden = false;
+}
+function clearDateError() {
+  const el = document.getElementById('dateFieldError');
+  if (el) el.hidden = true;
+}
+
+function openDatePicker() {
+  document.getElementById('datePickerPanel').hidden = false;
+  document.getElementById('dateTrigger').setAttribute('aria-expanded', 'true');
+  renderCalendar();
+}
+function closeDatePicker() {
+  document.getElementById('datePickerPanel').hidden = true;
+  document.getElementById('dateTrigger').setAttribute('aria-expanded', 'false');
+}
+
+function initDatePicker() {
+  const trigger = document.getElementById('dateTrigger');
+  const panel = document.getElementById('datePickerPanel');
+  if (!trigger || !panel) return;
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (panel.hidden) openDatePicker(); else closeDatePicker();
+  });
+  panel.addEventListener('click', (e) => e.stopPropagation());
+  document.addEventListener('click', () => { if (!panel.hidden) closeDatePicker(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden) closeDatePicker(); });
+
+  document.getElementById('datePrevMonth').addEventListener('click', () => {
+    calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() - 1, 1);
+    renderCalendar();
+  });
+  document.getElementById('dateNextMonth').addEventListener('click', () => {
+    calendarViewDate = new Date(calendarViewDate.getFullYear(), calendarViewDate.getMonth() + 1, 1);
+    renderCalendar();
+  });
+
+  renderCalendar();
+}
+
+function updateBreakBanner() {
+  const banner = document.getElementById('breakBanner');
+  const text = document.getElementById('breakBannerText');
+  if (!banner || !text) return;
+
+  const activeRange = findBlockedRange(new Date());
+  if (activeRange) {
+    const endLabel = parseISODate(activeRange.end).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    text.textContent = activeRange.reason
+      ? `We're currently on a short break (${activeRange.reason}) — back to taking orders after ${endLabel}.`
+      : `We're not taking new orders right now — back after ${endLabel}.`;
+    banner.hidden = false;
+  } else {
+    banner.hidden = true;
+  }
+}
+
 /* ---------- order submission (one-way: fires the request, then
    confirms on-screen — no reply email is expected or waited on) ---------- */
 orderForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const entries = cartEntries();
   if (entries.length === 0) return;
+
+  const dateValue = document.getElementById('custDate').value;
+  if (!dateValue) {
+    showDateError('Please choose a delivery date.');
+    return;
+  }
+  // Defensive re-check in case the blocked-dates list loaded or changed
+  // after the calendar was first rendered — the calendar itself already
+  // disables these days, this just makes sure a stale state can never
+  // slip an order through.
+  const blockedRange = findBlockedRange(parseISODate(dateValue));
+  if (blockedRange) {
+    showDateError(
+      blockedRange.reason
+        ? `Sorry, we're fully booked then — ${blockedRange.reason}. Please pick another date.`
+        : `Sorry, we're fully booked on that date. Please pick another date.`
+    );
+    return;
+  }
 
   const formData = new FormData(orderForm);
   const payload = {
@@ -309,6 +504,10 @@ orderForm.addEventListener('submit', async (e) => {
   submitBtn.disabled = false;
   submitBtn.textContent = 'Send order to the kitchen';
   orderForm.reset();
+  selectedDeliveryDate = null;
+  document.getElementById('dateTriggerLabel').textContent = 'Choose a date';
+  document.getElementById('dateTrigger').classList.remove('has-value');
+  clearDateError();
 });
 
 document.getElementById('trayDone').addEventListener('click', closeTray);
@@ -343,17 +542,27 @@ if ('IntersectionObserver' in window) {
 /* ---------- misc ---------- */
 document.getElementById('year').textContent = new Date().getFullYear();
 
+try {
+  initDatePicker();
+} catch (err) {
+  console.error('Date picker failed to start:', err);
+}
+
 /* ---------- init (menu + reviews) ----------
    Runs independently of the enhancements above, and is wrapped so a
    failure here surfaces in the console instead of silently leaving
    the page blank. */
 (async function init() {
   try {
-    const [menu, reviews] = await Promise.all([loadMenu(), loadReviews()]);
+    const [menu, reviews, blockedDates] = await Promise.all([loadMenu(), loadReviews(), loadBlockedDates()]);
     MENU = menu;
     renderMenu('all');
     renderReviews(reviews);
     updateTrayCount();
+
+    BLOCKED_RANGES = blockedDates;
+    renderCalendar();
+    updateBreakBanner();
   } catch (err) {
     console.error('Failed to initialize menu/reviews:', err);
   }

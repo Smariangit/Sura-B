@@ -57,6 +57,12 @@
   </div>
 </div>
 
+<!-- Only shown when the chef has marked today as unavailable in the
+     Blocked Dates sheet — hidden by default, filled in by script.js. -->
+<div class="break-banner" id="breakBanner" hidden>
+  <p id="breakBannerText"></p>
+</div>
+
 <main id="main">
 
   <!-- ============ HERO ============ -->
@@ -119,7 +125,7 @@
         </ul>
 
         <blockquote class="about-quote">
-          "I grew up watching my mother make laddus for every festival, and I wanted that same warmth in every box we send out — whether it's a brownie or a birthday cake." <span class="credential-note">[replace]</span>
+          "I grew up watching my mother make laddus for every festival, and I wanted that same warmth in every box we send out — whether it's a brownie or a birthday cake." <span class="credential-note">[replace with her own words]</span>
         </blockquote>
 
         <div class="trust-row">
@@ -277,9 +283,27 @@
       <textarea id="custAddress" name="address" rows="2" required autocomplete="street-address"></textarea>
     </div>
     <div class="field-row field-row-split">
-      <div>
-        <label for="custDate">Delivery date</label>
-        <input id="custDate" name="date" type="date" required>
+      <div class="date-field">
+        <label for="dateTrigger">Delivery date</label>
+        <button type="button" class="date-picker-trigger" id="dateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="datePickerPanel">
+          <span id="dateTriggerLabel">Choose a date</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <input type="hidden" id="custDate" name="date" required>
+
+        <div class="date-picker-panel" id="datePickerPanel" role="dialog" aria-label="Choose a delivery date" hidden>
+          <div class="date-picker-head">
+            <button type="button" class="icon-btn" id="datePrevMonth" aria-label="Previous month">&lsaquo;</button>
+            <span id="datePickerMonthLabel">September 2026</span>
+            <button type="button" class="icon-btn" id="dateNextMonth" aria-label="Next month">&rsaquo;</button>
+          </div>
+          <div class="date-picker-weekdays">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="date-picker-grid" id="datePickerGrid"></div>
+          <p class="date-picker-legend"><span class="legend-dot"></span> Fully booked — chef's unavailable those days</p>
+        </div>
+        <p class="date-field-error" id="dateFieldError" hidden></p>
       </div>
       <div>
         <label for="custSlot">Preferred window</label>
