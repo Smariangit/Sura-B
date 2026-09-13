@@ -26,6 +26,7 @@
     <nav class="main-nav" aria-label="Primary">
       <a href="#about">About</a>
       <a href="#menu">Menu</a>
+      <a href="gallery.html">Gallery</a>
       <a href="#how-it-works">How it works</a>
       <a href="#reviews">Reviews</a>
       <a href="#contact">Contact</a>
@@ -39,6 +40,7 @@
   <div class="mobile-nav" id="mobileNav" hidden>
     <a href="#about">About</a>
     <a href="#menu">Menu</a>
+    <a href="gallery.html">Gallery</a>
     <a href="#how-it-works">How it works</a>
     <a href="#reviews">Reviews</a>
     <a href="#contact">Contact</a>
@@ -120,7 +122,7 @@
 
         <ul class="about-credentials">
           <li>Trained in professional baking &amp; patisserie <span class="credential-note">[add culinary school / certification name]</span></li>
-          <li><span class="credential-note">[X]</span>+ years of hands-on baking experience</li>
+          <li><span class="credential-note">9+</span> years of hands-on baking experience</li>
           <li>Specializes in fusion Indian–Western baking — from laddus to layered cakes</li>
         </ul>
 
@@ -152,6 +154,7 @@
       <div class="section-head">
         <h2 id="menu-heading">Today's box</h2>
         <p>What's marked sold out has run out for the day — everything else ships within the window you choose at checkout.</p>
+        <p class="section-head-note">Don't see what you're after? <button type="button" class="link-button" id="customRequestBtnMenu">Request a custom order</button> — fox-nut laddus, a themed cake, anything.</p>
       </div>
 
       <div class="filter-row" id="filterRow" role="tablist" aria-label="Filter menu by category">
@@ -196,10 +199,16 @@
       <div class="section-head section-head-light">
         <h2 id="reviews-heading">From our customers</h2>
         <p>Notes people sent us after their order arrived.</p>
+        <p class="section-head-note"><button type="button" class="link-button link-button-light" id="reviewRequestBtn">Leave a review</button></p>
       </div>
-      <div class="reviews-grid" id="reviewsGrid">
-        <!-- injected by script.js -->
+      <div class="reviews-carousel">
+        <button type="button" class="carousel-nav carousel-prev" id="reviewsPrev" aria-label="Previous review">&lsaquo;</button>
+        <div class="reviews-slide" id="reviewsSlide" aria-live="polite">
+          <!-- injected by script.js -->
+        </div>
+        <button type="button" class="carousel-nav carousel-next" id="reviewsNext" aria-label="Next review">&rsaquo;</button>
       </div>
+      <div class="carousel-dots" id="reviewsDots"></div>
     </div>
   </section>
 
@@ -208,7 +217,10 @@
     <div class="wrap cta-inner">
       <h2 id="cta-heading">Baking again tomorrow morning.</h2>
       <p>Get your order in today and it'll be in tomorrow's box.</p>
-      <a href="#menu" class="btn btn-primary">Start an order</a>
+      <div class="cta-actions">
+        <a href="#menu" class="btn btn-primary">Start an order</a>
+        <button type="button" class="btn btn-ghost" id="customRequestBtn">Request a custom order</button>
+      </div>
     </div>
   </section>
 
@@ -226,9 +238,9 @@
     <div class="footer-col">
       <h4>Get in touch</h4>
       <ul>
-        <li><a href="https://instagram.com/surabakers" target="_blank" rel="noopener">Instagram</a></li>
-        <li><a href="https://wa.me/910000000000" target="_blank" rel="noopener">WhatsApp</a></li>
-        <li><a href="tel:+910000000000">+91 00000 00000</a></li>
+        <li><a href="https://www.instagram.com/surabakehouse" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://wa.me/918887793955" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="tel:+918887793955">+91 88877 93955</a></li>
         <li><a href="mailto:hello@surabakers.in">hello@surabakers.in</a></li>
       </ul>
     </div>
@@ -236,8 +248,8 @@
     <div class="footer-col">
       <h4>Kitchen hours</h4>
       <ul class="plain">
-        <li>Tue–Sun, 9am – 7pm</li>
-        <li>Closed Mondays</li>
+        <li>Tue–Sun, 11am – 8pm</li>
+        <li>Closed Thursdays</li>
         <li>Lucknow, Uttar Pradesh</li>
       </ul>
     </div>
@@ -334,6 +346,124 @@
     <h3>Your order is on its way to the kitchen</h3>
     <p>We'll call <span id="successPhone">you</span> to confirm the details. Thank you!</p>
     <button class="btn btn-ghost" id="trayDone">Done</button>
+  </div>
+</aside>
+
+<!-- ============ CUSTOM ORDER REQUEST PANEL ============
+     Reuses the exact same tray-overlay/tray-panel styling as the
+     order cart above, so it looks and behaves identically — just
+     different content. This is for items not on today's menu. -->
+<div class="tray-overlay" id="customOverlay" hidden></div>
+<aside class="tray-panel" id="customPanel" role="dialog" aria-modal="true" aria-labelledby="customTitle" hidden>
+  <div class="tray-panel-head">
+    <h2 id="customTitle">Request a custom order</h2>
+    <button class="icon-btn" id="customClose" aria-label="Close custom order form">&times;</button>
+  </div>
+
+  <form class="tray-form" id="customForm">
+    <p class="custom-intro">Want something that's not on today's menu — fox-nut (makhana) laddus, a themed cake, anything? Tell us what you have in mind and we'll call to confirm details and pricing.</p>
+
+    <div class="field-row">
+      <label for="customName">Your name</label>
+      <input id="customName" name="name" type="text" required autocomplete="name">
+    </div>
+    <div class="field-row">
+      <label for="customPhone">Phone number</label>
+      <input id="customPhone" name="phone" type="tel" required autocomplete="tel" inputmode="tel">
+    </div>
+    <div class="field-row">
+      <label for="customItem">What would you like made?</label>
+      <input id="customItem" name="item" type="text" required placeholder="e.g. Fox-nut (makhana) laddus">
+    </div>
+    <div class="field-row field-row-split">
+      <div>
+        <label for="customQty">Approximate quantity</label>
+        <input id="customQty" name="quantity" type="text" required placeholder="e.g. 20 pieces">
+      </div>
+      <div class="date-field">
+        <label for="customDateTrigger">Needed by (approx.)</label>
+        <button type="button" class="date-picker-trigger" id="customDateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="customDatePickerPanel">
+          <span id="customDateTriggerLabel">Choose a date</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <input type="hidden" id="customNeededBy" name="neededBy">
+
+        <div class="date-picker-panel" id="customDatePickerPanel" role="dialog" aria-label="Choose an approximate date" hidden>
+          <div class="date-picker-head">
+            <button type="button" class="icon-btn" id="customDatePrevMonth" aria-label="Previous month">&lsaquo;</button>
+            <span id="customDatePickerMonthLabel">September 2026</span>
+            <button type="button" class="icon-btn" id="customDateNextMonth" aria-label="Next month">&rsaquo;</button>
+          </div>
+          <div class="date-picker-weekdays">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="date-picker-grid" id="customDatePickerGrid"></div>
+          <p class="date-picker-legend"><span class="legend-dot"></span> Fully booked — chef's unavailable those days</p>
+        </div>
+      </div>
+    </div>
+    <div class="field-row">
+      <label for="customDetails">Details (optional)</label>
+      <textarea id="customDetails" name="details" rows="3" placeholder="Flavors, dietary needs, occasion, inspiration — anything that helps us get it right."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" id="submitCustomBtn">Send request</button>
+    <p class="tray-note">This is a request, not a confirmed order — we'll call to work out details and availability.</p>
+  </form>
+
+  <div class="tray-success" id="customSuccess" hidden>
+    <svg viewBox="0 0 60 60" width="52" height="52" aria-hidden="true">
+      <circle cx="30" cy="30" r="27" fill="none" stroke="#C0276A" stroke-width="2.5"/>
+      <path d="M18 31 L27 40 L43 21" fill="none" stroke="#C0276A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>Your request is on its way to the kitchen</h3>
+    <p>We'll call <span id="customSuccessPhone">you</span> to talk through the details. Thank you!</p>
+    <button class="btn btn-ghost" id="customDone">Done</button>
+  </div>
+</aside>
+
+<!-- ============ REVIEW SUBMISSION PANEL ============
+     Same reused tray-overlay/tray-panel styling again. Reviews
+     never go live automatically — every submission lands in the
+     Reviews sheet with Approved unchecked, same as one added by
+     the owner directly, so nothing posts without being read first. -->
+<div class="tray-overlay" id="reviewOverlay" hidden></div>
+<aside class="tray-panel" id="reviewPanel" role="dialog" aria-modal="true" aria-labelledby="reviewTitle" hidden>
+  <div class="tray-panel-head">
+    <h2 id="reviewTitle">Leave a review</h2>
+    <button class="icon-btn" id="reviewClose" aria-label="Close review form">&times;</button>
+  </div>
+
+  <form class="tray-form" id="reviewForm">
+    <p class="custom-intro">Tell us what you thought — it genuinely helps. We read every review before it goes on the site.</p>
+
+    <div class="field-row">
+      <label for="reviewName">Your name</label>
+      <input id="reviewName" name="name" type="text" required autocomplete="name">
+    </div>
+    <div class="field-row">
+      <label for="reviewDish">What did you order?</label>
+      <select id="reviewDish" name="dish" required>
+        <option value="">Choose a dish</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label for="reviewText">Your review</label>
+      <textarea id="reviewText" name="text" rows="4" required placeholder="What did you think?"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" id="submitReviewBtn">Send review</button>
+    <p class="tray-note">We read every review before it's shown on the site.</p>
+  </form>
+
+  <div class="tray-success" id="reviewSuccess" hidden>
+    <svg viewBox="0 0 60 60" width="52" height="52" aria-hidden="true">
+      <circle cx="30" cy="30" r="27" fill="none" stroke="#C0276A" stroke-width="2.5"/>
+      <path d="M18 31 L27 40 L43 21" fill="none" stroke="#C0276A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h3>Thanks for the review!</h3>
+    <p>We'll take a look and get it posted soon.</p>
+    <button class="btn btn-ghost" id="reviewDone">Done</button>
   </div>
 </aside>
 
