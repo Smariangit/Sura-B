@@ -5,13 +5,13 @@
    sample data below, so it always works for preview/dev.
    ========================================================= */
 const CONFIG = {
-  MENU_API_URL: 'https://script.google.com/macros/s/AKfycbxU8qAYph3woQjz4OFIQOya-VtxqqsHIg39N623r2HjVSghXhba9YunppUczNnfedZh7Q/exec?type=menu',
-  REVIEWS_API_URL: 'https://script.google.com/macros/s/AKfycbxU8qAYph3woQjz4OFIQOya-VtxqqsHIg39N623r2HjVSghXhba9YunppUczNnfedZh7Q/exec?type=reviews',
-  ORDER_API_URL:   'https://script.google.com/macros/s/AKfycbxU8qAYph3woQjz4OFIQOya-VtxqqsHIg39N623r2HjVSghXhba9YunppUczNnfedZh7Q/exec',
+  MENU_API_URL: 'https://script.google.com/macros/s/AKfycbxx407laHx9GPwx-8lIZoVCmRL5LliQLgBn-mTiaCNIRWog9OUu5neW5vpfk96fCGBN4w/exec?type=menu',
+  REVIEWS_API_URL: 'https://script.google.com/macros/s/AKfycbxx407laHx9GPwx-8lIZoVCmRL5LliQLgBn-mTiaCNIRWog9OUu5neW5vpfk96fCGBN4w/exec?type=reviews',
+  ORDER_API_URL:   'https://script.google.com/macros/s/AKfycbxx407laHx9GPwx-8lIZoVCmRL5LliQLgBn-mTiaCNIRWog9OUu5neW5vpfk96fCGBN4w/exec',
   // Same deployed script, just a different type — add a "Blocked Dates"
   // tab to the Sheet (Start Date | End Date | Reason) and this picks it
   // up automatically once Code.gs has the matching doGet branch.
-  BLOCKED_DATES_API_URL: 'https://script.google.com/macros/s/AKfycbxU8qAYph3woQjz4OFIQOya-VtxqqsHIg39N623r2HjVSghXhba9YunppUczNnfedZh7Q/exec?type=blocked',
+  BLOCKED_DATES_API_URL: 'https://script.google.com/macros/s/AKfycbxx407laHx9GPwx-8lIZoVCmRL5LliQLgBn-mTiaCNIRWog9OUu5neW5vpfk96fCGBN4w/exec?type=blocked',
 };
 
 /* Fallback sample data — mirrors exactly what the Google Sheet
