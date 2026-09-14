@@ -291,10 +291,6 @@ button { font-family: inherit; cursor: pointer; }
   gap: 56px;
   align-items: center;
 }
-@media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-collage { order: -1; height: 260px; max-width: 360px; margin: 0 auto 12px; }
-}
 .hero-kicker {
   font-size: 0.92rem;
   color: var(--saffron);
@@ -336,6 +332,7 @@ button { font-family: inherit; cursor: pointer; }
 /* photo collage — like snapshots scattered across the counter */
 .hero-collage {
   position: relative;
+  width: 100%;
   height: 420px;
 }
 .collage-photo {
@@ -369,7 +366,15 @@ button { font-family: inherit; cursor: pointer; }
 .collage-1 { top: 0; left: 4%; transform: rotate(-7deg); z-index: 2; }
 .collage-2 { top: 14%; right: 2%; transform: rotate(6deg); z-index: 1; }
 .collage-3 { bottom: 0; left: 24%; transform: rotate(-3deg); z-index: 3; }
+
+/* All mobile overrides for this section live in one place, after
+   every base/unconditional rule above — a media-query-scoped
+   declaration only wins the cascade if nothing unconditional comes
+   after it, so this block must be last or its overrides can silently
+   lose to the desktop rules despite the query matching. */
 @media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-collage { order: -1; width: 100%; max-width: 360px; height: 260px; margin: 0 auto 12px; }
   .collage-1 { width: 40%; left: 0; }
   .collage-2 { width: 40%; right: 0; top: 6%; }
   .collage-3 { width: 42%; left: 30%; bottom: -10px; }
