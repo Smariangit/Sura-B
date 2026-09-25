@@ -56,6 +56,8 @@ const FALLBACK_REVIEWS = [
 // or if that request fails, every day is open for ordering.
 const FALLBACK_BLOCKED_DATES = [];
 
+const GALLERY_IMAGES = ['25th Anniversary cake.png', '300 gram laddoo box.jpg', 'Mango and Dark Chocolate cake.jpg', '7kgs in 4 tiers.jpg', 'Anniversary cake.jpg', 'Assorted cupcake box.jpg', 'Banoffee pie in making_(1).jpg', 'Banoffee pie in making_.jpg', 'Banoffee pie.jpg', 'Bento cakes for small gatherings_.jpg', 'Best cookie everrrr.jpg', 'Best eggless brownies in town.jpg', 'Best-selling_.jpg', 'Bestseller cake slice_.jpg', 'Birthday cake.jpg', 'Birthday return favours.jpg', 'Bite size brownie in tub.jpg', 'Brown butter, banana and chocolate tea cake.jpg', 'Brownie gifting box.jpg', 'Cake by slice.jpg', 'Cake for first anniversary_.jpg', 'Cakes for twins.jpg', 'Caramel and sea salt cookies_.jpg', 'Chef at work.png', 'Chef got certified in whipping cream flower making_.jpg', 'Chef with her creation_.png', 'Chocolate clusters for hampers_.jpg', 'Chocolate clusters tin.jpg', 'Chocolate mousse cake.jpg', 'Chocolate, nuts and fruits clusters_.jpg', 'Christmas plum cake in making_.jpg', 'Classic banoffee pie.jpg', 'Countdown to birthday cake.jpg', 'Cream cheese and garlic buns made from scratch_.jpg', 'Custom cake for Amazon.jpg', 'Custom cake for birthday.jpg', 'Custom cake in Half kg.jpg', 'Custom cake for Batman lover.jpg', 'Custom cake.jpg', 'Custom made baby shower hamper_.jpg', 'Custom made Unicorn cake.jpg', 'Custom made cake.jpg', 'Custom made cake.png', 'Custom made Diwali hamper_.jpg', 'Custom made hampers on display_.jpg', 'Customised cake.jpg', 'Customised hampers for baby shower_.jpg', 'Dates, fig, nuts and seed laddoo(no sugar added).jpg', 'Dessert jar.jpg', 'Dessert tubs_.jpg', 'Doll cake of your dreams!.png', 'Dolphin cake for a four year old.jpg', 'Doraemon cake.jpg', 'Dream tin cake.jpg', 'Eggless pineapple upside down cake.jpg', 'Engagement cake.jpg', 'Engagement cake.png', 'Festive cupcakes box_.png', 'Festive hamper.jpg', 'First birthday cake to remember_.png', 'First Birthday cake.jpg', 'First birthing made special!.png', 'For Raksha Bandhan hampers_.jpg', 'For your brownie cravings!.jpg', 'Freshly baked.jpg', 'Hamper making_.jpg', 'Hampers assembly_.jpg', 'Hampers in bulk for a store opening_.jpg', 'Handmade bouquets for custom hampers_.jpg', 'Healthy gifting with homemade goodness_.jpg', 'Healthy laddoos for your sweet cravings_.jpg', 'Homemade aata biscuits (made with ghee).jpg', 'Made with clean and pure ingredients_.jpg', 'Made with pure covurture chocolate_.jpg', 'Made with pure ghee, moong dal and nuts.jpg', 'Mixed berries compote_.jpg', 'Moong dal and nuts laddoo(sweetened with desi khaand).jpg', 'Nothing like a classic sheet cake_.png', 'Nutella and hazelnut cookies in making_.jpg', 'Oats and cranberry cookies_.jpg', 'One for a swiftie _3.png', 'One for that whiskey lover in your group_.jpg', 'One to celebrate all their hardwork.png', 'Peppa pig cake for twins.jpg', 'Perfect gift for mom-to-be.jpg', 'Perfect little squares.jpg', 'Pies going out_.jpg', 'Pineapple upside down cake slice_.jpg', 'Ragi and walnut brownies_.jpg', 'Raksha Bandhan hamper_.jpg', 'Raspberry and white chocolate cake slice_.jpg', 'Return favour for baby shower_.jpg', 'Rum plum cake.jpg', 'Something sweet for sweet 60.jpg', 'Strawberry and chocolate cake_.jpg', 'Summer special_.jpg', 'Sunshine in a box.jpg', 'Sura’s special eggless fudge brownie_.jpg', 'Tea time cake.jpg', 'Tiered cake for engagement_.png', 'Tiered cake in buttercream_.png', 'Tin boxes for gifting_.jpg', 'Valentine special_.jpg', 'Valentine special_.png', 'Vintage sheet cake for 80th birthday.png', 'Viral London cake.jpg', 'Whipped cream flower cake.jpg', 'Winter special strawberry frasier.jpg'];
+
 const ICONS = {
   brownies: `<svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="18" width="36" height="24" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 26h36M20 18v24M34 18v24" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M15 13c1-3 3-3 4-1s3 2 4 0 3-3 4-1 3 2 4 0 3-3 4-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   cakes: `<svg viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 30l18-14 18 14v10a2 2 0 0 1-2 2H11a2 2 0 0 1-2-2V30Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 30h36" stroke="currentColor" stroke-width="1.4" opacity=".6"/><path d="M27 16V9m0 0c-2 0-3-1.5-3-3s1.5-3 3-3 3 1.5 3 3-1 3-3 3Z" stroke="currentColor" stroke-width="1.6"/></svg>`,
@@ -645,26 +647,35 @@ if ('IntersectionObserver' in window) {
 let GALLERY_ITEMS = [];
 let lightboxIndex = 0;
 
-function renderGallery(dishes) {
+function renderGallery() {
   const grid = document.getElementById('galleryGrid');
-  if (!grid) return; // not on the gallery page
+  if (!grid) return;
 
-  const withPhotos = dishes.filter(d => d.image);
-  if (!withPhotos.length) {
-    grid.innerHTML = `<p class="gallery-empty">Photos are on their way — check back soon.</p>`;
-    return;
-  }
+  GALLERY_ITEMS = GALLERY_IMAGES.map(file => ({
+    image: `gallery/${file}`,
+    name: file
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[_()]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }));
 
-  GALLERY_ITEMS = withPhotos;
-  grid.innerHTML = withPhotos.map((d, i) => `
-    <button type="button" class="gallery-item" data-index="${i}" aria-label="View larger photo of ${d.name}">
-      <img src="${d.image}" alt="${d.name}" loading="lazy" onerror="this.closest('.gallery-item').remove()">
-      <span class="gallery-caption">${d.name}</span>
+  grid.innerHTML = GALLERY_ITEMS.map((item, i) => `
+    <button
+      type="button"
+      class="gallery-item"
+      data-index="${i}"
+      aria-label="View larger photo of ${item.name}"
+    >
+      <img src="${item.image}" alt="${item.name}" loading="lazy">
+      <span class="gallery-caption">${item.name}</span>
     </button>
   `).join('');
 
   grid.querySelectorAll('.gallery-item').forEach(btn => {
-    btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
+    btn.addEventListener('click', () =>
+      openLightbox(Number(btn.dataset.index))
+    );
   });
 }
 
@@ -917,7 +928,7 @@ try {
     MENU = menu;
     renderMenu('all');
     renderReviews(reviews);
-    renderGallery(menu);
+    renderGallery();
     populateReviewDishSelect();
     updateTrayCount();
 
